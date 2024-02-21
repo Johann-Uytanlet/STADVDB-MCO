@@ -19,15 +19,22 @@ GROUP BY c.RegionName, c.Province, c.City WITH ROLLUP;
 
 -- Slice: Count of appointments per given specific location/within a time period
 SELECT
-   a.QueueDate,
-   COUNT(*) AS appointment_count
-FROM appointments a
-JOIN clinics c ON a.clinicid = c.clinicid
-WHERE a.QueueDate BETWEEN '2019-01-01 00:0:00' AND '2022-12-31 00:00:00'  -- Replace with the desired time period
-GROUP BY a.QueueDate
-ORDER BY appointment_count DESC;
+    d.mainspecialty AS specialty,
+    COUNT(*) AS total_appointments
+FROM
+    appointments a
+    JOIN doctors d ON d.doctorid = a.doctorid
+WHERE
+    d.mainspecialty = 'Surgery';
 
-
+SELECT
+    d.mainspecialty AS specialty,
+    COUNT(*) AS total_appointments
+FROM
+    appointments_with_index a
+    JOIN doctors_with_index d ON d.doctorid = a.doctorid
+WHERE
+    d.mainspecialty = 'Surgery';
 
 -- Drill Down and Aggregation: Count of appointments per specialty per region
 SELECT 
